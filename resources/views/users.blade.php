@@ -49,14 +49,6 @@
                 }
             ]
         })
-
-        $('#users tbody').on( 'click', 'button', function () {
-            if(this.className == 'edit'){
-                var selected = table.row( $(this).parents('tr') ).column(1);
-                console.log(selected)
-                selected.visible(false)
-            }
-        } );
     })
 </script>
 
