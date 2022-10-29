@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
-use App\Models\User;
-use App\Models\Company;
 use App\Models\Address;
+use App\Models\Company;
+use App\Models\User;
 use DB;
 
 class UsersController extends Controller
@@ -47,5 +48,27 @@ class UsersController extends Controller
         });
 
         return response('Datos guardados correctamente',200);
+    }
+
+    public function update(Request $request){
+        try {
+            $user = User::where('id',$request->id)->first();
+            
+            if($request->photo){
+                $photo = $request->file('photo');
+                $ext = $request->photo->extension();
+                $photo->storeAs('',$user->id.'.'.$ext,'public');
+                $user->photo = $user->id.'.'.$ext;
+            }
+    
+            $user->birthDate = $request->birthDate;
+            $user->save();
+
+            return response($user,200);
+
+        } catch (\Exception $e) {
+            dd($e->getMessage());
+            return response('Error',422);
+        }
     }
 }

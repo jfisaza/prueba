@@ -10,6 +10,7 @@
         axios.get('https://jsonplaceholder.typicode.com/users').then(response => {
             table = new DataTable('#users', {
                 data: response.data,
+                order: [[0, 'asc']],
                 columns: [
                     { 
                         title: 'Name',
@@ -40,7 +41,24 @@
             })
             $('#users tbody').on( 'click', 'button', function () {
                 var data = table.row( $(this).parents('tr') ).data();
-                axios.post(window.location.href+'storeUser', { data })
+                axios.post(window.location.href+'storeUser', { data }).then(response => {
+                    Swal.fire({
+                        title: 'Success!',
+                        icon: 'success',
+                        timer: 2000,
+                        timerProgressBar: true,
+                        showConfirmButton: false
+                    })
+                }).catch(error => {
+                    Swal.fire({
+                        title: 'Oh!',
+                        text: 'Something went wrong',
+                        icon: 'error',
+                        timer: 2000,
+                        timerProgressBar: true,
+                        showConfirmButton: false
+                    }) 
+                })
             } );
         })
     })
